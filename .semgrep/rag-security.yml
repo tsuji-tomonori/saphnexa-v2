@@ -1,0 +1,41 @@
+rules:
+  - id: nuxt-no-raw-v-html-for-rag
+    languages: [generic]
+    severity: ERROR
+    message: RAGまたはMarkdown出力をv-htmlへ直接渡さず、Comarkコンポーネント経由で描画してください。
+    paths:
+      include:
+        - apps/web/**/*.vue
+    pattern-regex: 'v-html\s*='
+
+  - id: hono-env-access-only-in-config
+    languages: [typescript]
+    severity: ERROR
+    message: 環境変数アクセスをconfig/env.tsへ集約してください。
+    paths:
+      include:
+        - apps/api/src/**/*.ts
+      exclude:
+        - apps/api/src/config/env.ts
+    pattern: process.env.$KEY
+
+  - id: hono-no-direct-unvalidated-json
+    languages: [typescript]
+    severity: ERROR
+    message: c.req.json()を直接利用せず、共通の入力検証関数を経由してください。
+    paths:
+      include:
+        - apps/api/src/routes/**/*.ts
+    pattern: await $CTX.req.json()
+
+  - id: do-not-log-rag-content
+    languages: [typescript]
+    severity: ERROR
+    message: prompt、messages、excerpt、documentTextをログへ直接出力しないでください。
+    pattern-either:
+      - pattern: console.$METHOD(..., $OBJ.prompt, ...)
+      - pattern: console.$METHOD(..., $OBJ.messages, ...)
+      - pattern: console.$METHOD(..., $OBJ.excerpt, ...)
+      - pattern: console.$METHOD(..., $OBJ.documentText, ...)
+      - pattern: $LOGGER.$METHOD(..., $OBJ.prompt, ...)
+      - pattern: $LOGGER.$METHOD(..., $OBJ.messages, ...)

@@ -1,0 +1,15 @@
+{
+  "$schema": "https://unpkg.com/knip@latest/schema.json",
+  "workspaces": {
+    "apps/web": {},
+    "apps/api": {
+      "project": ["src/**/*.ts"],
+    },
+    "infra": {
+      "entry": ["bin/**/*.ts"],
+      "project": ["bin/**/*.ts", "lib/**/*.ts"],
+    },
+  },
+  "ignoreDependencies": ["vue", "vue-router", "tsx"],
+  "ignoreBinaries": ["semgrep"],
+}
