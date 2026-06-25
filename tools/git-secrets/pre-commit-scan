@@ -1,0 +1,15 @@
+#!/usr/bin/env sh
+set -eu
+
+if ! command -v git-secrets >/dev/null 2>&1; then
+  cat >&2 <<'EOF'
+git-secrets is not installed.
+Install it and register patterns before committing:
+  brew install git-secrets
+  git secrets --install
+  git secrets --register-aws
+EOF
+  exit 1
+fi
+
+git secrets --scan
