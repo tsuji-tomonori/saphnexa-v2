@@ -1,0 +1,9 @@
+node_modules
+.output
+.nuxt
+.nitro
+dist
+cdk.out
+*.local
+.env
+.DS_Store
