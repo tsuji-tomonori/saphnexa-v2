@@ -1,0 +1,24 @@
+{
+  "name": "saphnexa-v2",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "workspaces": [
+    "apps/*",
+    "infra"
+  ],
+  "scripts": {
+    "dev": "npm run dev --workspace @saphnexa/web",
+    "dev:web": "npm run dev --workspace @saphnexa/web",
+    "dev:api": "npm run dev --workspace @saphnexa/api",
+    "build": "npm run build --workspaces --if-present",
+    "typecheck": "npm run typecheck --workspaces --if-present",
+    "cdk": "npm run cdk --workspace @saphnexa/infra"
+  },
+  "engines": {
+    "node": ">=20.19.0"
+  },
+  "devDependencies": {
+    "typescript": "^6.0.3"
+  }
+}
