@@ -1,5 +1,6 @@
 /* eslint-disable -- OpenAPI JSONを動的に走査する生成CLI */
 import { generateApiList } from './generate-api-list.js'
+import { generateDetailDesignSpecs } from './generate-detail-design-specs.js'
 import { generateIfSpecs } from './generate-if-specs.js'
 import { generateOpenApi } from './generate-openapi.js'
 import { formatGenerated } from './format.js'
@@ -38,5 +39,8 @@ await writeOrCheck(
   check,
 )
 for (const spec of generateIfSpecs(openApi)) {
+  await writeOrCheck(spec.path, await formatGenerated(spec.path, spec.content), check)
+}
+for (const spec of generateDetailDesignSpecs(openApi)) {
   await writeOrCheck(spec.path, await formatGenerated(spec.path, spec.content), check)
 }
