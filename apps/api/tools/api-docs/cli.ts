@@ -2,6 +2,7 @@
 import { generateApiList } from './generate-api-list.js'
 import { generateIfSpecs } from './generate-if-specs.js'
 import { generateOpenApi } from './generate-openapi.js'
+import { generateSequenceSpecs } from './generate-sequence-specs.js'
 import { formatGenerated } from './format.js'
 import { stable, writeOrCheck } from './generation-io.js'
 import { checkContracts } from './check-contracts.js'
@@ -38,5 +39,8 @@ await writeOrCheck(
   check,
 )
 for (const spec of generateIfSpecs(openApi)) {
+  await writeOrCheck(spec.path, await formatGenerated(spec.path, spec.content), check)
+}
+for (const spec of generateSequenceSpecs()) {
   await writeOrCheck(spec.path, await formatGenerated(spec.path, spec.content), check)
 }
