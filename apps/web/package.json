@@ -8,7 +8,10 @@
     "build": "nuxt build",
     "generate": "nuxt generate",
     "preview": "nuxt preview",
-    "typecheck": "nuxt prepare && vue-tsc --noEmit"
+    "typecheck": "nuxt prepare && vue-tsc --noEmit",
+    "ui-docs:generate": "tsx tools/ui-docs/cli.ts generate",
+    "ui-docs:check": "tsx tools/ui-docs/cli.ts generate --check",
+    "ui-archlint": "tsx tools/ui-docs/cli.ts lint"
   },
   "dependencies": {
     "nuxt": "^3.21.8",
