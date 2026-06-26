@@ -62,4 +62,4 @@ CI では、`npm install` 後に `format:check`、`lint`、`typecheck`、`build`
 
 `apps/api/src/app.ts` の `createApp()` はHTTPサーバーを起動せず、テストや文書生成からimportできます。サーバー起動は `apps/api/src/server.ts` に限定しています。公開APIは operation 単位で `contract.ts`、`schemas.ts`、`samples.ts`、`route.ts` を持ち、Zod schema / `createRoute` / operation contract を一次情報として OpenAPI 3.1 と Markdown IF仕様を生成します。
 
-生成物は `openapi/openapi.gen.json`、`docs/spec/40.apis/apis-list.gen.md`、`docs/spec/40.apis/**/if.gen.md`、`docs/spec/40.apis/**/query_gen.md` です。変更後は `npm run docs:generate --workspace @saphnexa/api` を実行し、CI相当では `npm run docs:check --workspace @saphnexa/api` と `npm run archlint --workspace @saphnexa/api` で生成漏れと契約不整合を検出します。
+生成物は `openapi/openapi.gen.json`、`docs/spec/40.apis/apis-list.gen.md`、`docs/spec/40.apis/**/if.gen.md` です。変更後は `npm run docs:generate --workspace @saphnexa/api` を実行し、CI相当では `npm run docs:check --workspace @saphnexa/api` と `npm run archlint --workspace @saphnexa/api` で生成漏れと契約不整合を検出します。
