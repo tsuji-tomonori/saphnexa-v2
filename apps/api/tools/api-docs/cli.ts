@@ -2,6 +2,7 @@
 import { generateApiList } from './generate-api-list.js'
 import { generateIfSpecs } from './generate-if-specs.js'
 import { generateOpenApi } from './generate-openapi.js'
+import { generateMessageCatalogs, generateMessageIndex } from './generate-message-catalog.js'
 import { formatGenerated } from './format.js'
 import { stable, writeOrCheck } from './generation-io.js'
 import { checkContracts } from './check-contracts.js'
@@ -40,3 +41,14 @@ await writeOrCheck(
 for (const spec of generateIfSpecs(openApi)) {
   await writeOrCheck(spec.path, await formatGenerated(spec.path, spec.content), check)
 }
+for (const spec of generateMessageCatalogs(openApi)) {
+  await writeOrCheck(spec.path, await formatGenerated(spec.path, spec.content), check)
+}
+await writeOrCheck(
+  '../../docs/spec/40.apis/messages-index.gen.md',
+  await formatGenerated(
+    '../../docs/spec/40.apis/messages-index.gen.md',
+    generateMessageIndex(openApi),
+  ),
+  check,
+)
