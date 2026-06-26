@@ -21,7 +21,8 @@
     "stylelint": "stylelint \"apps/web/**/*.{css,vue}\" --cache --max-warnings 0",
     "deadcode": "knip",
     "deps:check": "depcruise apps infra --config .dependency-cruiser.mjs",
-    "semgrep": "semgrep scan --config=.semgrep/rag-security.yml --metrics=off --error"
+    "semgrep": "semgrep scan --config=.semgrep/rag-security.yml --metrics=off --error",
+    "docs:db": "node scripts/generate-db-docs.mjs && prettier docs/database/schema.md --write"
   },
   "engines": {
     "node": ">=20.19.0"
