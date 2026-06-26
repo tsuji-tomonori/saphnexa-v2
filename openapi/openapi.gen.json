@@ -1,0 +1,227 @@
+{
+  "components": {
+    "parameters": {},
+    "schemas": {
+      "ErrorDetail": {
+        "properties": {
+          "field": {
+            "description": "エラー対象のフィールド",
+            "type": "string"
+          },
+          "reason": {
+            "description": "エラー理由",
+            "type": "string"
+          },
+          "resource": {
+            "description": "関連リソース",
+            "type": "string"
+          },
+          "retryable": {
+            "description": "再試行可能か",
+            "type": "boolean"
+          },
+          "statusCode": {
+            "description": "HTTPステータスコード",
+            "type": "integer"
+          }
+        },
+        "required": ["reason", "statusCode", "retryable"],
+        "type": "object"
+      },
+      "ErrorResponse": {
+        "properties": {
+          "error": {
+            "properties": {
+              "code": {
+                "description": "機械判定用エラーコード",
+                "type": "string"
+              },
+              "details": {
+                "description": "エラー詳細",
+                "items": {
+                  "$ref": "#/components/schemas/ErrorDetail"
+                },
+                "type": "array"
+              },
+              "message": {
+                "description": "利用者向けメッセージ",
+                "type": "string"
+              },
+              "traceId": {
+                "description": "トレースID",
+                "type": "string"
+              }
+            },
+            "required": ["code", "message", "details", "traceId"],
+            "type": "object"
+          }
+        },
+        "required": ["error"],
+        "type": "object"
+      },
+      "HealthResponse": {
+        "properties": {
+          "status": {
+            "description": "APIプロセスの稼働状態",
+            "enum": ["healthy"],
+            "type": "string"
+          }
+        },
+        "required": ["status"],
+        "type": "object"
+      },
+      "RootResponse": {
+        "properties": {
+          "name": {
+            "description": "API名",
+            "enum": ["saphnexa-api"],
+            "type": "string"
+          },
+          "status": {
+            "description": "APIの簡易ステータス",
+            "enum": ["ok"],
+            "type": "string"
+          }
+        },
+        "required": ["name", "status"],
+        "type": "object"
+      }
+    }
+  },
+  "info": {
+    "description": "saphnexa-v2 の API 契約",
+    "license": {
+      "identifier": "UNLICENSED",
+      "name": "UNLICENSED"
+    },
+    "title": "saphnexa API",
+    "version": "0.1.0"
+  },
+  "jsonSchemaDialect": "https://json-schema.org/draft/2020-12/schema",
+  "openapi": "3.1.0",
+  "paths": {
+    "/": {
+      "get": {
+        "description": "API名と簡易ステータスを返す",
+        "operationId": "getRoot",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RootResponse"
+                }
+              }
+            },
+            "description": "API情報"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "入力検証エラー"
+          },
+          "500": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "想定外エラー"
+          }
+        },
+        "summary": "API情報を取得する",
+        "tags": ["system"]
+      }
+    },
+    "/health": {
+      "get": {
+        "description": "APIプロセスの稼働状態を返す",
+        "operationId": "getHealth",
+        "parameters": [
+          {
+            "description": "業務エラー確認用のテスト入力",
+            "in": "query",
+            "name": "fail",
+            "required": false,
+            "schema": {
+              "description": "業務エラー確認用のテスト入力",
+              "enum": ["conflict"],
+              "type": "string"
+            }
+          },
+          {
+            "description": "想定外例外確認用のテスト入力",
+            "in": "query",
+            "name": "throw",
+            "required": false,
+            "schema": {
+              "description": "想定外例外確認用のテスト入力",
+              "enum": ["unexpected"],
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HealthResponse"
+                }
+              }
+            },
+            "description": "正常に稼働している"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "入力検証エラー"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "業務エラー"
+          },
+          "500": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "想定外エラー"
+          }
+        },
+        "summary": "稼働状態を取得する",
+        "tags": ["system"]
+      }
+    }
+  },
+  "security": [],
+  "servers": [
+    {
+      "description": "Default API server",
+      "url": "https://api.saphnexa.local"
+    }
+  ],
+  "webhooks": {},
+  "x-generated": "自動生成・直接編集禁止: npm run docs:generate --workspace @saphnexa/api で更新"
+}
