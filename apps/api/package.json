@@ -12,7 +12,9 @@
     "docs:generate": "tsx tools/api-docs/cli.ts generate",
     "docs:check": "tsx tools/api-docs/cli.ts generate --check",
     "archlint": "tsx tools/api-docs/cli.ts lint",
-    "openapi:lint": "redocly lint ../../openapi/openapi.gen.json"
+    "openapi:lint": "redocly lint ../../openapi/openapi.gen.json",
+    "test:watch": "vitest --exclude \"dist/**\"",
+    "test:coverage": "vitest run --coverage --exclude \"dist/**\""
   },
   "dependencies": {
     "@hono/node-server": "^1.19.6",
@@ -24,6 +26,7 @@
   "devDependencies": {
     "@redocly/cli": "^2.35.0",
     "@types/node": "^20.19.0",
+    "@vitest/coverage-v8": "^4.1.9",
     "openapi-typescript": "^7.13.0",
     "tsx": "^4.20.6",
     "vitest": "^4.1.9"
