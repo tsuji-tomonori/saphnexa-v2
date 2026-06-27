@@ -7,3 +7,5 @@ cdk.out
 *.local
 .env
 .DS_Store
+
+coverage

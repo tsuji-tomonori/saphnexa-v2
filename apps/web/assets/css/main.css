@@ -1,0 +1,12 @@
+@import 'tailwindcss';
+@import '@nuxt/ui';
+
+:root {
+  color-scheme: light;
+}
+html {
+  background: #f8fafc;
+}
+body {
+  margin: 0;
+}
