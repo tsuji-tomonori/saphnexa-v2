@@ -9,7 +9,7 @@ describe('GET /health', () => {
   it('正常系レスポンスを返す', async () => {
     const response = await createApp().request('/health')
     expect(response.status).toBe(200)
-    expect(HealthResponseSchema.parse(await response.json())).toEqual({ status: 'healthy' })
+    expect(HealthResponseSchema.parse(await response.json())).toEqual({ status: 'ok' })
   })
 
   it('入力検証エラーを共通ErrorResponseで返す', async () => {
