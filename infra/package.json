@@ -7,7 +7,10 @@
     "build": "tsc -p tsconfig.json",
     "typecheck": "tsc -p tsconfig.json --noEmit",
     "cdk": "cdk",
-    "synth": "cdk synth"
+    "synth": "cdk synth",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:coverage": "vitest run --coverage"
   },
   "dependencies": {
     "aws-cdk-lib": "^2.260.0",
@@ -15,7 +18,9 @@
   },
   "devDependencies": {
     "@types/node": "^20.19.0",
+    "@vitest/coverage-v8": "^4.1.9",
     "aws-cdk": "^2.1128.1",
-    "tsx": "^4.20.6"
+    "tsx": "^4.20.6",
+    "vitest": "^4.1.9"
   }
 }
