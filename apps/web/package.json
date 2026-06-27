@@ -11,7 +11,10 @@
     "typecheck": "nuxt prepare && vue-tsc --noEmit",
     "ui-docs:generate": "tsx tools/ui-docs/cli.ts generate",
     "ui-docs:check": "tsx tools/ui-docs/cli.ts generate --check",
-    "ui-archlint": "tsx tools/ui-docs/cli.ts lint"
+    "ui-archlint": "tsx tools/ui-docs/cli.ts lint",
+    "test": "nuxt prepare && vitest run",
+    "test:watch": "nuxt prepare && vitest",
+    "test:coverage": "nuxt prepare && vitest run --coverage"
   },
   "dependencies": {
     "nuxt": "^3.21.8",
@@ -19,6 +22,11 @@
     "vue-router": "^4.6.0"
   },
   "devDependencies": {
+    "@nuxt/test-utils": "^4.0.3",
+    "@vitest/coverage-v8": "^4.1.9",
+    "@vue/test-utils": "^2.4.11",
+    "happy-dom": "^20.10.6",
+    "vitest": "^4.1.9",
     "vue-tsc": "^3.1.5"
   }
 }
