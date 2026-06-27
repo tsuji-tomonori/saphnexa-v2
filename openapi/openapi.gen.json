@@ -2,6 +2,191 @@
   "components": {
     "parameters": {},
     "schemas": {
+      "ChatEvent": {
+        "oneOf": [
+          {
+            "properties": {
+              "text": {
+                "type": "string"
+              },
+              "type": {
+                "enum": ["delta"],
+                "type": "string"
+              }
+            },
+            "required": ["type", "text"],
+            "type": "object"
+          },
+          {
+            "properties": {
+              "citation": {
+                "$ref": "#/components/schemas/Citation"
+              },
+              "type": {
+                "enum": ["citation"],
+                "type": "string"
+              }
+            },
+            "required": ["type", "citation"],
+            "type": "object"
+          },
+          {
+            "properties": {
+              "messageId": {
+                "type": "string"
+              },
+              "type": {
+                "enum": ["done"],
+                "type": "string"
+              }
+            },
+            "required": ["type", "messageId"],
+            "type": "object"
+          },
+          {
+            "properties": {
+              "code": {
+                "type": "string"
+              },
+              "message": {
+                "type": "string"
+              },
+              "type": {
+                "enum": ["error"],
+                "type": "string"
+              }
+            },
+            "required": ["type", "code", "message"],
+            "type": "object"
+          }
+        ]
+      },
+      "ChatRequest": {
+        "properties": {
+          "message": {
+            "description": "質問本文",
+            "maxLength": 4000,
+            "minLength": 1,
+            "type": "string"
+          }
+        },
+        "required": ["message"],
+        "type": "object"
+      },
+      "Citation": {
+        "properties": {
+          "documentId": {
+            "description": "文書ID",
+            "type": "string"
+          },
+          "excerpt": {
+            "description": "引用テキスト",
+            "type": "string"
+          },
+          "id": {
+            "description": "引用ID",
+            "type": "string"
+          },
+          "page": {
+            "description": "ページ番号",
+            "exclusiveMinimum": 0,
+            "type": "integer"
+          },
+          "title": {
+            "description": "文書名",
+            "type": "string"
+          }
+        },
+        "required": ["id", "documentId", "title", "excerpt"],
+        "type": "object"
+      },
+      "CreateUploadUrlRequest": {
+        "properties": {
+          "contentType": {
+            "description": "Content-Type",
+            "maxLength": 255,
+            "minLength": 1,
+            "type": "string"
+          },
+          "fileName": {
+            "description": "ファイル名",
+            "maxLength": 255,
+            "minLength": 1,
+            "pattern": "^[^/\\\\]+$",
+            "type": "string"
+          },
+          "fileSize": {
+            "description": "ファイルサイズ",
+            "exclusiveMinimum": 0,
+            "maximum": 104857600,
+            "type": "integer"
+          }
+        },
+        "required": ["fileName", "contentType", "fileSize"],
+        "type": "object"
+      },
+      "CreateUploadUrlResponse": {
+        "properties": {
+          "documentId": {
+            "description": "文書ID",
+            "format": "uuid",
+            "type": "string"
+          },
+          "expiresAt": {
+            "description": "URL有効期限",
+            "format": "date-time",
+            "type": "string"
+          },
+          "uploadUrl": {
+            "description": "S3 PUT用Presigned URL",
+            "format": "uri",
+            "type": "string"
+          }
+        },
+        "required": ["documentId", "uploadUrl", "expiresAt"],
+        "type": "object"
+      },
+      "DocumentListResponse": {
+        "properties": {
+          "documents": {
+            "items": {
+              "$ref": "#/components/schemas/DocumentSummary"
+            },
+            "type": "array"
+          }
+        },
+        "required": ["documents"],
+        "type": "object"
+      },
+      "DocumentSummary": {
+        "properties": {
+          "createdAt": {
+            "description": "登録日時",
+            "format": "date-time",
+            "type": "string"
+          },
+          "errorMessage": {
+            "description": "エラー内容",
+            "type": "string"
+          },
+          "fileName": {
+            "description": "ファイル名",
+            "type": "string"
+          },
+          "id": {
+            "description": "文書ID",
+            "format": "uuid",
+            "type": "string"
+          },
+          "status": {
+            "description": "取込状態",
+            "enum": ["uploading", "processing", "ready", "failed", "deleting"],
+            "type": "string"
+          }
+        },
+        "required": ["id", "fileName", "status", "createdAt"],
+        "type": "object"
+      },
       "ErrorDetail": {
         "properties": {
           "field": {
@@ -63,7 +248,7 @@
         "properties": {
           "status": {
             "description": "APIプロセスの稼働状態",
-            "enum": ["healthy"],
+            "enum": ["ok"],
             "type": "string"
           }
         },
@@ -138,6 +323,272 @@
         },
         "summary": "API情報を取得する",
         "tags": ["system"]
+      }
+    },
+    "/api/chat": {
+      "post": {
+        "description": "単一ナレッジベースに対する質問を受け付け、回答と引用元をSSEで返す",
+        "operationId": "postChat",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ChatRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "text/event-stream": {
+                "schema": {
+                  "$ref": "#/components/schemas/ChatEvent"
+                }
+              }
+            },
+            "description": "SSE形式のチャットイベント"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "入力検証エラー"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "認証エラー"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "認可エラー"
+          },
+          "500": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "想定外エラー"
+          }
+        },
+        "summary": "RAGチャットに質問する",
+        "tags": ["chat"]
+      }
+    },
+    "/api/documents": {
+      "get": {
+        "description": "登録済み文書と取込状態の一覧を返す",
+        "operationId": "listDocuments",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DocumentListResponse"
+                }
+              }
+            },
+            "description": "文書一覧"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "認証エラー"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "認可エラー"
+          },
+          "500": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "想定外エラー"
+          }
+        },
+        "summary": "文書一覧を取得する",
+        "tags": ["documents"]
+      }
+    },
+    "/api/documents/{documentId}": {
+      "delete": {
+        "description": "文書と関連する保存データの削除を受け付ける",
+        "operationId": "deleteDocument",
+        "parameters": [
+          {
+            "description": "文書ID",
+            "in": "path",
+            "name": "documentId",
+            "required": true,
+            "schema": {
+              "description": "文書ID",
+              "format": "uuid",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "202": {
+            "description": "削除を受け付けた"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "入力検証エラー"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "認証エラー"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "認可エラー"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "文書が存在しない"
+          },
+          "500": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "想定外エラー"
+          }
+        },
+        "summary": "文書削除を受け付ける",
+        "tags": ["documents"]
+      }
+    },
+    "/api/documents/upload-url": {
+      "post": {
+        "description": "文書アップロード用のS3 Presigned URLを発行する",
+        "operationId": "createDocumentUploadUrl",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateUploadUrlRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CreateUploadUrlResponse"
+                }
+              }
+            },
+            "description": "アップロードURL"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "入力検証エラー"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "認証エラー"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "認可エラー"
+          },
+          "500": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "想定外エラー"
+          }
+        },
+        "summary": "アップロードURLを発行する",
+        "tags": ["documents"]
       }
     },
     "/health": {
