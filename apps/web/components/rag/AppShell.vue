@@ -11,11 +11,15 @@ const items = [
   <UDashboardGroup>
     <UDashboardSidebar collapsible resizable>
       <template #header>
-        <div class="flex items-center gap-2 px-2 py-3">
-          <UAvatar icon="i-lucide-sparkles" size="sm" />
+        <div class="flex items-center gap-2.5 px-2 py-3">
+          <span
+            class="flex size-8 flex-none items-center justify-center rounded-lg bg-ink-900 font-mono text-base font-bold text-white"
+          >
+            S
+          </span>
           <div>
-            <p class="font-semibold">Saphnexa</p>
-            <p class="text-xs text-gray-500">MVP RAG Console</p>
+            <p class="font-bold tracking-tight">Saphnexa</p>
+            <p class="font-mono text-[11px] text-ink-500">RAG Console</p>
           </div>
         </div>
       </template>

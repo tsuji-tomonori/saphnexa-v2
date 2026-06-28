@@ -41,12 +41,13 @@ apps/web  Nuxt 4 + Nuxt UI v4 アプリ
 apps/api  Hono API（OpenAPIHono + Zod を一次情報にしたAPI契約）
 openapi   生成済みOpenAPI 3.1 JSON
 docs/spec/40.apis  生成済みAPI一覧・IF仕様
+docs/design        UI デザイン仕様（Relay DS）
 infra     AWS CDK スタック
 ```
 
 ## Web UI
 
-MVP の Web UI は Cognito Managed Login を前提に自作認証画面を持たず、`/` は `/chat` へリダイレクトします。主要画面は、回答ストリーミングと引用元 Slideover を備える `/chat`、Presigned URL アップロード・取込状態一覧・削除確認モーダルを備える `/documents` です。UI 基盤は `@nuxt/ui`、Markdown 表示基盤は `@comark/nuxt`、アイコンは Lucide Iconify コレクションを使用します。
+MVP の Web UI は Cognito Managed Login を前提に自作認証画面を持たず、`/` は `/chat` へリダイレクトします。主要画面は、回答ストリーミングと引用元 Slideover を備える `/chat`、Presigned URL アップロード・取込状態一覧・削除確認モーダルを備える `/documents` です。UI 基盤は `@nuxt/ui`、Markdown 表示基盤は `@comark/nuxt`、アイコンは Lucide Iconify コレクションを使用します。デザイントークン・コンポーネントの仕様は `docs/design/design-system.md`（Relay DS）を単一の真実とします。
 
 ## 静的解析・品質ゲート
 

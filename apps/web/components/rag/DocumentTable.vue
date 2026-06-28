@@ -6,21 +6,11 @@ defineProps<{ documents: DocumentSummary[]; loading: boolean }>()
 const emit = defineEmits<{ delete: [document: DocumentSummary] }>()
 
 const columns: TableColumn<DocumentSummary>[] = [
-  { accessorKey: 'fileName', header: '文書名' },
-  { accessorKey: 'status', header: '取込状態' },
-  { accessorKey: 'createdAt', header: '登録日時' },
+  { accessorKey: 'fileName', header: 'ドキュメント' },
+  { accessorKey: 'status', header: 'ステータス' },
+  { accessorKey: 'createdAt', header: '更新日' },
   { id: 'actions', header: '' },
 ]
-const statusColor: Record<
-  DocumentSummary['status'],
-  'neutral' | 'info' | 'success' | 'error' | 'warning'
-> = {
-  uploading: 'info',
-  processing: 'warning',
-  ready: 'success',
-  failed: 'error',
-  deleting: 'neutral',
-}
 </script>
 
 <template>
@@ -39,18 +29,24 @@ const statusColor: Record<
       description="ファイルを登録すると取込状態が表示されます。"
     />
     <UTable v-else :data="documents" :columns="columns">
+      <template #fileName-cell="{ row }">
+        <div class="flex min-w-0 items-center gap-3">
+          <FileTypeBadge :file-name="row.original.fileName" :size="30" />
+          <span class="truncate font-medium text-ink-900 dark:text-ink-100">
+            {{ row.original.fileName }}
+          </span>
+        </div>
+      </template>
       <template #status-cell="{ row }">
-        <UBadge
-          :color="statusColor[row.original.status as DocumentSummary['status']]"
-          variant="soft"
-          >{{ row.original.status }}</UBadge
-        >
-        <p v-if="row.original.errorMessage" class="mt-1 text-xs text-red-600">
+        <DocStatusBadge :status="row.original.status" />
+        <p v-if="row.original.errorMessage" class="mt-1 text-xs text-error">
           {{ row.original.errorMessage }}
         </p>
       </template>
       <template #createdAt-cell="{ row }">
-        {{ new Date(row.original.createdAt).toLocaleString('ja-JP') }}
+        <span class="font-mono text-xs text-ink-600 dark:text-ink-400">
+          {{ new Date(row.original.createdAt).toLocaleString('ja-JP') }}
+        </span>
       </template>
       <template #actions-cell="{ row }">
         <UDropdownMenu
