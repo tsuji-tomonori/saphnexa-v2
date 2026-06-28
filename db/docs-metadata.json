@@ -1,0 +1,45 @@
+{
+  "relations": [
+    { "from": "conversations", "to": "messages", "label": "1:N conversation_id (app-validated)" },
+    {
+      "from": "messages",
+      "to": "message_citations",
+      "label": "1:N assistant message_id (app-validated)"
+    },
+    {
+      "from": "messages",
+      "to": "message_feedback",
+      "label": "1:N optional feedback (app-validated)"
+    },
+    {
+      "from": "documents",
+      "to": "document_operations",
+      "label": "1:N document_id (app-validated)"
+    },
+    { "from": "documents", "to": "message_citations", "label": "1:N document_id logical reference" }
+  ],
+  "crud": {
+    "POST /api/chat": {
+      "conversations": "CU",
+      "messages": "CRU",
+      "message_citations": "C",
+      "documents": "R"
+    },
+    "GET /api/conversations": { "conversations": "R" },
+    "GET /api/conversations/:id/messages": {
+      "conversations": "R",
+      "messages": "R",
+      "message_citations": "R"
+    },
+    "DELETE /api/conversations/:id": { "conversations": "U" },
+    "PATCH /api/conversations/:id": { "conversations": "U" },
+    "PUT /api/messages/:id/feedback": { "messages": "R", "message_feedback": "CU" },
+    "document ingestion worker": { "documents": "CRU", "document_operations": "CRU" },
+    "conversation purge batch": {
+      "conversations": "D",
+      "messages": "D",
+      "message_citations": "D",
+      "message_feedback": "D"
+    }
+  }
+}

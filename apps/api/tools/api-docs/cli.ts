@@ -1,8 +1,12 @@
 /* eslint-disable -- OpenAPI JSONを動的に走査する生成CLI */
 import { generateApiList } from './generate-api-list.js'
+import { generateDetailDesignSpecs } from './generate-detail-design-specs.js'
 import { generateIfSpecs } from './generate-if-specs.js'
+import { generateMessageCatalogs, generateMessageIndex } from './generate-message-catalog.js'
 import { generateOpenApi } from './generate-openapi.js'
+import { generateQuerySpecs } from './generate-query-specs.js'
 import { generateSequenceSpecs } from './generate-sequence-specs.js'
+import { generateUnitTestFactors } from './generate-unit-test-factors.js'
 import { formatGenerated } from './format.js'
 import { stable, writeOrCheck } from './generation-io.js'
 import { checkContracts } from './check-contracts.js'
@@ -41,6 +45,26 @@ await writeOrCheck(
 for (const spec of generateIfSpecs(openApi)) {
   await writeOrCheck(spec.path, await formatGenerated(spec.path, spec.content), check)
 }
+for (const spec of generateDetailDesignSpecs(openApi)) {
+  await writeOrCheck(spec.path, await formatGenerated(spec.path, spec.content), check)
+}
+for (const spec of generateMessageCatalogs(openApi)) {
+  await writeOrCheck(spec.path, await formatGenerated(spec.path, spec.content), check)
+}
+await writeOrCheck(
+  '../../docs/spec/40.apis/messages-index.gen.md',
+  await formatGenerated(
+    '../../docs/spec/40.apis/messages-index.gen.md',
+    generateMessageIndex(openApi),
+  ),
+  check,
+)
+for (const spec of generateQuerySpecs(openApi)) {
+  await writeOrCheck(spec.path, await formatGenerated(spec.path, spec.content), check)
+}
 for (const spec of generateSequenceSpecs()) {
+  await writeOrCheck(spec.path, await formatGenerated(spec.path, spec.content), check)
+}
+for (const spec of generateUnitTestFactors(openApi)) {
   await writeOrCheck(spec.path, await formatGenerated(spec.path, spec.content), check)
 }

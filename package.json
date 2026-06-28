@@ -22,6 +22,7 @@
     "deadcode": "knip",
     "deps:check": "depcruise apps infra --config .dependency-cruiser.mjs",
     "semgrep": "semgrep scan --config=.semgrep/rag-security.yml --metrics=off --error",
+    "docs:db": "node scripts/generate-db-docs.mjs && prettier docs/database/schema.md --write",
     "test": "npm run test --workspaces --if-present",
     "test:coverage": "npm run test:coverage --workspaces --if-present"
   },
