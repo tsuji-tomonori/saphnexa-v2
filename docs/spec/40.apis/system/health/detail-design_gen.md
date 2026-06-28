@@ -58,6 +58,6 @@ APIプロセスの稼働状態を返す
 
 ```json
 {
-  "status": "healthy"
+  "status": "ok"
 }
 ```
