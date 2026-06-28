@@ -17,7 +17,7 @@ const open = defineModel<boolean>('open', { required: true })
           <div class="flex items-start gap-3">
             <FileTypeBadge :file-name="citation.title" :size="34" />
             <div class="min-w-0 space-y-1">
-              <p class="truncate font-bold text-ink-900 dark:text-ink-100">
+              <p class="truncate font-bold text-ink-900">
                 {{ citation.title }}
               </p>
               <p class="font-mono text-xs text-ink-500">
@@ -27,7 +27,7 @@ const open = defineModel<boolean>('open', { required: true })
           </div>
         </template>
         <blockquote
-          class="rounded-r-md border-l-2 border-iris-200 bg-ink-50 px-4 py-3 text-sm leading-7 text-ink-700 dark:bg-ink-800 dark:text-ink-200"
+          class="rounded-r-md border-l-2 border-iris-200 bg-ink-50 px-4 py-3 text-sm leading-7 text-ink-700"
         >
           「{{ citation.excerpt }}」
         </blockquote>

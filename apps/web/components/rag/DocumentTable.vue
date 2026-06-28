@@ -14,10 +14,10 @@ const columns: TableColumn<DocumentSummary>[] = [
 </script>
 
 <template>
-  <UCard>
+  <UCard class="rounded-[14px] border-ink-200 bg-white shadow-sm">
     <template #header>
       <div class="flex items-center justify-between gap-3">
-        <h2 class="font-semibold">取込状態一覧</h2>
+        <h2 class="font-semibold text-ink-900">取込状態一覧</h2>
         <UBadge color="neutral" variant="soft">{{ documents.length }} 件</UBadge>
       </div>
     </template>
@@ -32,7 +32,7 @@ const columns: TableColumn<DocumentSummary>[] = [
       <template #fileName-cell="{ row }">
         <div class="flex min-w-0 items-center gap-3">
           <FileTypeBadge :file-name="row.original.fileName" :size="30" />
-          <span class="truncate font-medium text-ink-900 dark:text-ink-100">
+          <span class="truncate font-medium text-ink-900">
             {{ row.original.fileName }}
           </span>
         </div>
@@ -44,7 +44,7 @@ const columns: TableColumn<DocumentSummary>[] = [
         </p>
       </template>
       <template #createdAt-cell="{ row }">
-        <span class="font-mono text-xs text-ink-600 dark:text-ink-400">
+        <span class="font-mono text-xs text-ink-600">
           {{ new Date(row.original.createdAt).toLocaleString('ja-JP') }}
         </span>
       </template>

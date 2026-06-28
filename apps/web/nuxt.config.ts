@@ -15,7 +15,10 @@ const strictCompilerOptions = {
 export default defineNuxtConfig({
   compatibilityDate: '2026-06-25',
   devtools: { enabled: true },
-  modules: ['@nuxt/eslint', '@nuxt/ui', '@comark/nuxt'],
+  modules: ['@nuxt/eslint', '@nuxt/ui'],
+  ui: {
+    colorMode: false,
+  },
   css: ['~/assets/css/main.css'],
   app: {
     head: {

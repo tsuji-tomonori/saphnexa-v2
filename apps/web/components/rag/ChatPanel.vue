@@ -20,17 +20,29 @@ const emit = defineEmits<{ preview: [citation: Citation] }>()
       :status="streaming ? 'streaming' : 'ready'"
       should-scroll-to-bottom
     >
-      <UChatMessage
+      <article
         v-for="message in messages"
         :key="message.id"
-        :message="{
-          id: message.id,
-          role: message.role,
-          parts: [{ type: 'text', text: message.content || '回答を生成しています…' }],
-        }"
+        class="mb-5 flex w-full min-w-0 last:mb-0"
+        :class="message.role === 'user' ? 'justify-start' : 'justify-start'"
+        :aria-label="message.role === 'user' ? '質問' : '回答'"
       >
-        <template #content>
-          <div class="prose prose-sm max-w-none dark:prose-invert whitespace-pre-wrap">
+        <div
+          class="flex w-full min-w-0 max-w-3xl flex-col gap-2"
+          :class="message.role === 'user' ? 'items-start' : 'items-start'"
+        >
+          <p
+            class="font-mono text-[11px] font-semibold leading-none text-ink-500"
+            :class="message.role === 'user' ? 'text-left' : 'text-left'"
+          >
+            {{ message.role === 'user' ? '質問' : '回答' }}
+          </p>
+          <div
+            class="min-w-0 max-w-full whitespace-pre-wrap break-all px-4 py-3 text-sm leading-7 shadow-sm"
+            :class="message.role === 'user'
+              ? 'rounded-[14px] rounded-bl-md bg-iris-500 text-white'
+              : 'rounded-[14px] rounded-bl-md border border-ink-200 bg-white text-ink-800'"
+          >
             {{ message.content || '回答を生成しています…' }}
           </div>
           <CitationList
@@ -38,8 +50,8 @@ const emit = defineEmits<{ preview: [citation: Citation] }>()
             :citations="message.citations ?? []"
             @preview="emit('preview', $event)"
           />
-        </template>
-      </UChatMessage>
+        </div>
+      </article>
     </UChatMessages>
   </section>
 </template>

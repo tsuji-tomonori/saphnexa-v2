@@ -14,7 +14,7 @@ const emit = defineEmits<{ preview: [citation: Citation] }>()
       v-for="(citation, index) in citations"
       :key="citation.id"
       type="button"
-      class="group flex w-full gap-3.5 rounded-xl border border-ink-200 bg-white p-4 text-left transition-colors hover:border-primary-200 hover:bg-iris-50/40 dark:border-ink-800 dark:bg-ink-900"
+      class="group flex w-full gap-3.5 rounded-[14px] border border-ink-200 bg-white p-4 text-left shadow-sm transition-colors hover:border-iris-200 hover:bg-iris-50/40"
       @click="emit('preview', citation)"
     >
       <FileTypeBadge :file-name="citation.title" :size="34" />
@@ -25,12 +25,12 @@ const emit = defineEmits<{ preview: [citation: Citation] }>()
           >
             {{ index + 1 }}
           </span>
-          <span class="truncate text-sm font-bold text-ink-900 dark:text-ink-100">
+          <span class="truncate text-sm font-bold text-ink-900">
             {{ citation.title }}
           </span>
         </div>
         <p
-          class="mb-2 rounded-r-md border-l-2 border-iris-200 bg-ink-50 px-3 py-2 text-[13px] leading-relaxed text-ink-700 dark:bg-ink-800 dark:text-ink-300"
+          class="mb-2 rounded-r-md border-l-2 border-iris-200 bg-ink-50 px-3 py-2 text-[13px] leading-relaxed text-ink-700"
         >
           「{{ citation.excerpt }}」
         </p>
