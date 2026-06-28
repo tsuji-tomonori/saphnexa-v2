@@ -10,3 +10,7 @@ package-lock.json
 skills
 .pre-commit-config.yaml
 AGENTS.md
+
+# デザイン原本(Relay DS の素材。整形対象外)
+docs/design/*.html
+docs/design/*.zip
