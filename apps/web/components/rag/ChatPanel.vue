@@ -23,11 +23,9 @@ const emit = defineEmits<{ preview: [citation: Citation] }>()
       <UChatMessage
         v-for="message in messages"
         :key="message.id"
-        :message="{
-          id: message.id,
-          role: message.role,
-          parts: [{ type: 'text', text: message.content || '回答を生成しています…' }],
-        }"
+        :id="message.id"
+        :role="message.role"
+        :parts="[{ type: 'text', text: message.content || '回答を生成しています…' }]"
       >
         <template #content>
           <div class="prose prose-sm max-w-none whitespace-pre-wrap text-ink-800">
