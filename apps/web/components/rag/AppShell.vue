@@ -28,9 +28,15 @@ const items = [
         <UDropdownMenu
           :items="[[{ label: 'Cognito Managed Loginでログアウト', icon: 'i-lucide-log-out' }]]"
         >
-          <UButton color="neutral" variant="ghost" block icon="i-lucide-user-circle"
-            >利用者メニュー</UButton
+          <UButton
+            color="neutral"
+            variant="ghost"
+            block
+            icon="i-lucide-user-circle"
+            class="justify-start text-ink-700 hover:bg-ink-100"
           >
+            利用者メニュー
+          </UButton>
         </UDropdownMenu>
       </template>
     </UDashboardSidebar>

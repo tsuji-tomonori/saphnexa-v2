@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onBeforeUnmount, ref, useToast } from '#imports'
+import { onBeforeUnmount, onMounted, ref, useToast } from '#imports'
 import { useDocuments } from '~/composables/useDocuments'
 
 defineOptions({ name: 'DocumentsPage' })
@@ -13,12 +13,13 @@ const deleting = ref(false)
 const deleteOpen = ref(false)
 const targetDocument = ref<DocumentSummary>()
 
-await docs.refresh()
-const intervalId = import.meta.client
-  ? window.setInterval(() => {
-      docs.refresh().catch(() => undefined)
-    }, 5000)
-  : undefined
+let intervalId: number | undefined
+onMounted(() => {
+  docs.refresh().catch(() => undefined)
+  intervalId = window.setInterval(() => {
+    docs.refresh().catch(() => undefined)
+  }, 5000)
+})
 onBeforeUnmount(() => {
   if (intervalId) window.clearInterval(intervalId)
 })
@@ -74,7 +75,7 @@ async function confirmDelete() {
       title="文書管理"
       description="ファイル登録、取込状態の確認、文書削除を行います。"
     />
-    <main class="space-y-6 p-4 md:p-6">
+    <main class="min-h-[calc(100vh-4rem)] space-y-6 bg-ink-50 p-4 md:p-6">
       <UAlert
         v-if="docs.errorMessage.value"
         color="error"

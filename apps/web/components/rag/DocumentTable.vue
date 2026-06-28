@@ -14,10 +14,10 @@ const columns: TableColumn<DocumentSummary>[] = [
 </script>
 
 <template>
-  <UCard>
+  <UCard class="rounded-[14px] border-ink-200 bg-white shadow-sm">
     <template #header>
       <div class="flex items-center justify-between gap-3">
-        <h2 class="font-semibold">取込状態一覧</h2>
+        <h2 class="font-semibold text-ink-900">取込状態一覧</h2>
         <UBadge color="neutral" variant="soft">{{ documents.length }} 件</UBadge>
       </div>
     </template>
