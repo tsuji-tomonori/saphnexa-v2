@@ -13,7 +13,7 @@ const emit = defineEmits<{ confirm: [] }>()
     description="S3オブジェクト、ベクトルインデックス、文書メタデータの削除を開始します。"
   >
     <template #body>
-      <p class="text-sm text-gray-600 dark:text-gray-300">
+      <p class="text-sm text-ink-600">
         {{ document?.fileName }} を削除キューに入れます。この操作は取り消せません。
       </p>
     </template>

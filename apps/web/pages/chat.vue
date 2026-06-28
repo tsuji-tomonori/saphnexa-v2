@@ -34,7 +34,7 @@ function openPreview(citation: Citation) {
       :description="chat.errorMessage.value"
       class="m-4"
     />
-    <div class="flex min-h-[calc(100vh-4rem)] flex-col bg-gray-50 dark:bg-gray-950">
+    <div class="flex min-h-[calc(100vh-4rem)] flex-col bg-ink-50">
       <ChatPanel
         :messages="chat.messages.value"
         :streaming="chat.status.value === 'streaming'"

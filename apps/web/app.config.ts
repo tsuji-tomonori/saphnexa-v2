@@ -5,6 +5,7 @@
  * パレット実体は assets/css/main.css の @theme で定義。
  */
 export default defineAppConfig({
+  colorMode: false,
   ui: {
     colors: {
       primary: 'iris',

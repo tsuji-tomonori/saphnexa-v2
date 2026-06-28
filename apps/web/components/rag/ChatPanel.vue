@@ -30,7 +30,7 @@ const emit = defineEmits<{ preview: [citation: Citation] }>()
         }"
       >
         <template #content>
-          <div class="prose prose-sm max-w-none dark:prose-invert whitespace-pre-wrap">
+          <div class="prose prose-sm max-w-none whitespace-pre-wrap text-ink-800">
             {{ message.content || '回答を生成しています…' }}
           </div>
           <CitationList

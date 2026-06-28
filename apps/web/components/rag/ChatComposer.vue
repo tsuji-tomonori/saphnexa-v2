@@ -16,17 +16,21 @@ function handleSubmit() {
 </script>
 
 <template>
-  <form
-    class="border-t border-gray-200 bg-white p-4 dark:border-gray-800 dark:bg-gray-950"
-    @submit.prevent="handleSubmit"
+  <div
+    class="border-t border-ink-200 bg-white p-4"
   >
-    <UChatPrompt v-model="prompt" placeholder="ナレッジベースへ質問する" :disabled="streaming">
+    <UChatPrompt
+      v-model="prompt"
+      placeholder="ナレッジベースへ質問する"
+      :disabled="streaming"
+      @submit.prevent="handleSubmit"
+    >
       <template #footer>
         <div class="flex w-full items-center justify-between gap-3">
-          <p class="text-xs text-gray-500">回答本文と引用元を同じストリームで受信します。</p>
+          <p class="text-xs text-ink-500">回答本文と引用元を同じストリームで受信します。</p>
           <UChatPromptSubmit :status="streaming ? 'streaming' : 'ready'" @click="handleSubmit" />
         </div>
       </template>
     </UChatPrompt>
-  </form>
+  </div>
 </template>
